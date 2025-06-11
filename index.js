@@ -17,9 +17,10 @@ function setBackgroundColor(){
     this.style.backgroundColor = "black";
 }
 
-function createGridCells(){
-    const numOfSquares = (squarePerSide) * squarePerSide;
-    const widthOrHeight = `${(GRID_SIDE / squarePerSide) - 2}px`
+function createGridCells(cellsPerSide = squarePerSide){
+    squarePerSide = cellsPerSide;
+    const numOfSquares = (cellsPerSide) * cellsPerSide;
+    const widthOrHeight = `${(GRID_SIDE / cellsPerSide) - 2}px`
     for (let i = 0; i < numOfSquares; i++){
         const gridCell = document.createElement('div');
 
@@ -33,9 +34,16 @@ function createGridCells(){
 }
 
 function removeGridCells(){
-    while(sketchArea.fristChild){
+    while(sketchArea.firstChild){
         sketchArea.removeChild(sketchArea.firstChild);
     }
+}
+
+slider.oninput = function(){
+    let txt = `${this.value} x ${this.value} (Resolution)`;
+    sliderValue.innerHTML = txt;
+    removeGridCells();
+    createGridCells(this.value);
 }
 
 createGridCells();
