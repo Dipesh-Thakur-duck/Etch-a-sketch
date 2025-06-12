@@ -16,14 +16,17 @@ body{
 }
 .top{
     display:flex;
+    gap:30px;
     flex-wrap:wrap;
-    margin:100px auto 0 auto;
+    margin-top:100px;
     padding:3px;
     background-color:white;
     color:var(--inactive-color);
     width:fit-content;
     margin-bottom:6px;
-
+}
+#grid-toggle, #sketch-eraser{
+    font-size: 30px;
 }
 #sketch-area{
     display:flex;
@@ -36,6 +39,9 @@ body{
 }
 #grid-toggle{
     cursor: pointer;
+}
+#sketch-eraser{
+    cursor:pointer;
 }
 
 #slider-container{

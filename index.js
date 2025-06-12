@@ -4,8 +4,6 @@ const inactiveColor = getComputedStyle(document.body).getPropertyValue("--inacti
 
 let squarePerSide = 16;
 
-const container = document.querySelector(".container");
-
 const sketchArea = document.querySelector("#sketch-area");
 
 const sliderContainer = document.querySelector("#slider-container");
@@ -16,8 +14,14 @@ const sliderValue = document.querySelector("#slider-value");
 
 const gridToggle = document.querySelector("#grid-toggle");
 
+const sketchEraser = document.querySelector("#sketch-eraser");
+
 let squrePerSide = 16;
 let gridVisible = false;
+let eraserActive = false;
+
+let isDrawing = false;
+let isErasing = false;
 
 function toggleGrid(){
     gridVisible = gridVisible ? false: true;
@@ -27,9 +31,26 @@ function toggleGrid(){
     createGridCells(squarePerSide);
 }
 
+function toggleErase(){
+    eraserActive = eraserActive ? false: true;
+    sketchEraser.style.color = eraserActive ? ascentColor: inactiveColor;
+}
 
-function setBackgroundColor(){
-    this.style.backgroundColor = "black";
+function handleDrawing(e){
+    if(eraserActive){
+        eraser(e);
+    }else{
+        setBackgroundColor(e);
+    }
+}
+
+function setBackgroundColor(e){
+    if(e.type === "mousedown"){
+        isDrawing = true;
+        e.target.style.BackgroundColor = 'black';
+    }else if(e.type === "mouseover" && isDrawing){
+        e.target.style.backgroundColor = "black";
+    }else isDrawing = false;
 }
 
 function createGridCells(cellsPerSide = squarePerSide){
@@ -50,7 +71,10 @@ function createGridCells(cellsPerSide = squarePerSide){
 
         gridCell.style.width = gridCell.style.height = widthOrHeight;
 
-        gridCell.addEventListener("mouseover",setBackgroundColor);
+        gridCell.addEventListener("mousedown",(e)=>handleDrawing(e));
+        gridCell.addEventListener("mouseover",(e)=>handleDrawing(e));
+        gridCell.addEventListener("mouseup",(e)=>handleDrawing(e));
+
 
         sketchArea.appendChild(gridCell);
 
@@ -71,6 +95,16 @@ slider.oninput = function(){
     createGridCells(this.value);
 }
 
+function eraser(e){
+    if(e.type === "mousedown"){
+        isErasing = true;
+        e.target.style.BackgroundColor = 'white';
+    }else if(e.type === "mouseover" && isErasing){
+        e.target.style.backgroundColor = "white";
+    }else isDrawing = false;
+}
+
 gridToggle.addEventListener("click",toggleGrid);
+sketchEraser.addEventListener("click",toggleErase);
 
 createGridCells();
